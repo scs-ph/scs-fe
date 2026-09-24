@@ -45,12 +45,14 @@ private backend commit.
 `backend-version.json` records:
 
 - backend repository;
-- backend ref for human context;
+- backend ref that must still resolve to the pinned commit;
 - exact tested backend commit SHA;
 - deterministic OpenAPI SHA-256.
 
-Frontend production promotion must use that exact backend evidence, not an
-unresolved “latest dev” reference.
+`frontend-backend-contract` fails if the configured ref has advanced beyond the
+pinned SHA. Frontend production promotion therefore proves that the exact
+backend commit tested by the frontend is also the current backend deployment
+target, not merely an older commit that passed previously.
 
 ## Required checks
 
@@ -60,7 +62,7 @@ unresolved “latest dev” reference.
 - `frontend-release-gate`
 
 Vercel Deployment Checks require `frontend-release-gate` before assigning the
-production alias. A failed backend module gate causes
+production alias. A stale backend pin or failed `backend-release-gate` causes
 `frontend-backend-contract` to fail and therefore blocks frontend production
 promotion.
 
@@ -89,3 +91,7 @@ The type-safety fix changes CDR and Customer Return PDFs to read the current
 4. Update `backend-version.json` on the frontend feature branch.
 5. Run all frontend checks.
 6. Review before the frontend `main` merge.
+
+For a frontend-only change, no new backend commit is required. Leave the pin
+unchanged when it still equals backend `main`; refresh it when backend `main`
+has advanced independently.

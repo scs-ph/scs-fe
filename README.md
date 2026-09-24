@@ -190,9 +190,9 @@ PLAYWRIGHT_CHANNEL=chromium npm run ci
 Without `PLAYWRIGHT_CHANNEL=chromium`, Playwright uses an installed Google
 Chrome channel.
 
-`backend-version.json` pins the exact tested backend commit and OpenAPI hash.
-The frontend release gate fails when that backend evidence is missing or not
-green.
+`backend-version.json` pins the current backend `main` commit and OpenAPI hash.
+The frontend release gate fails when that pin is stale, when the backend
+evidence is missing or not green, or when the OpenAPI hash differs.
 
 ## Troubleshooting
 
