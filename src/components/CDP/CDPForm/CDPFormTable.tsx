@@ -152,8 +152,11 @@ const CDPFormTable = ({
           </tr>
         </thead>
         <tbody>
-          {formattedAllocs.map((item, index) => {
-            const key = `${item.id}-${item.cpo_id}-${item.stock_code}`;
+          {formattedAllocs.map((item) => {
+            // Identify a row by its allocation item: that is what the save
+            // payload keys off, and two allocations can carry the same stock
+            // code for the same customer.
+            const key = `${item.alloc_item_id}`;
             const price = addCommaToNumberWithTwoPlaces(item?.price ?? 0);
 
             return (
@@ -178,9 +181,7 @@ const CDPFormTable = ({
                       if (raw !== "" && !/^\d+$/.test(raw)) return;
                       setFormattedAllocs((prevAllocItems) =>
                         prevAllocItems.map((allocItem) =>
-                          allocItem.id === item.id &&
-                          allocItem.stock_code === item.stock_code &&
-                          allocItem.cpo_id === item.cpo_id
+                          allocItem.alloc_item_id === item.alloc_item_id
                             ? {
                                 ...allocItem,
                                 dp_qty: raw,
