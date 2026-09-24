@@ -247,7 +247,7 @@ const ViewStockTransfer = ({
       const url = `/api/stock-transfers/${selectedRow.id}`;
       try {
         const response = await axiosInstance.delete(url);
-        toast.success("Stock Transfer archived successfully!");
+        toast.success("Stock Transfer hidden successfully!");
         setStockTransfers((prevST) => ({
           ...prevST,
           items: prevST.items.map((ST) =>
@@ -257,7 +257,7 @@ const ViewStockTransfer = ({
         }));
       } catch (error: any) {
         toast.error(
-          `Error message: ${getErrorMessage(error, "Archive unsuccessful")}`,
+          `Error message: ${getErrorMessage(error, "Hide unsuccessful")}`,
         );
       }
     }
@@ -327,7 +327,7 @@ const ViewStockTransfer = ({
               <Option value="all">Active</Option>
               <Option value="unposted">Unposted</Option>
               <Option value="posted">Posted</Option>
-              <Option value="archived">Archived</Option>
+              <Option value="archived">Posted (Hidden)</Option>
             </Select>
           </FormControl>
           <DateRangeFilter
@@ -436,7 +436,7 @@ const ViewStockTransfer = ({
                   STR No.
                 </th>
                 <th style={{ width: 120 }}>Tx. Date</th>
-                <th style={{ width: 110 }}>Status</th>
+                <th style={{ width: 150, textAlign: "center" }}>Status</th>
                 <th style={{ width: 130 }}>RR Transfer</th>
                 <th style={{ width: 100 }}>RR No.</th>
                 <th style={{ width: 200 }}>Remarks</th>
@@ -487,7 +487,7 @@ const ViewStockTransfer = ({
                   >
                     <td>{stockTransfer.id}</td>
                     <td>{stockTransfer.transaction_date}</td>
-                    <td>
+                    <td style={{ textAlign: "center" }}>
                       <StatusChip status={stockTransfer.status} />
                     </td>
                     <td>{stockTransfer.rr_transfer ? "Yes" : "No"}</td>
@@ -537,7 +537,7 @@ const ViewStockTransfer = ({
                             }}
                             disabled={stockTransfer.status === "archived"}
                           >
-                            Archive
+                            Hide
                           </Button>
                         )}
 

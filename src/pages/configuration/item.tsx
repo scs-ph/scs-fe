@@ -698,7 +698,6 @@ const ItemForm = (): JSX.Element => {
               <TableLoadingRows
                 columns={16}
                 numericColumns={[2, 3, 4, 5, 6, 7, 8, 9, 10, 11]}
-                statusColumns={[14]}
                 actionColumn={15}
                 actionCount={2}
               />

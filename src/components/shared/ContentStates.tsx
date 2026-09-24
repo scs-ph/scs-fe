@@ -45,7 +45,7 @@ export function TableLoadingRows({
             };
           }
           if (statusColumns.includes(index)) {
-            return { kind: "status" };
+            return { kind: "status", align: "center" };
           }
           if (numericColumns.includes(index)) {
             return { kind: "number", align: "right" };
@@ -106,12 +106,24 @@ function TableLoadingCell({
 
   if (column.kind === "status") {
     return (
-      <Skeleton
-        variant="rectangular"
-        width={column.contentWidth ?? 64}
-        height={22}
-        sx={{ borderRadius: "xl" }}
-      />
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent:
+            column.align === "right"
+              ? "flex-end"
+              : column.align === "center"
+                ? "center"
+                : "flex-start",
+        }}
+      >
+        <Skeleton
+          variant="rectangular"
+          width={column.contentWidth ?? 88}
+          height={22}
+          sx={{ borderRadius: "xl" }}
+        />
+      </Box>
     );
   }
 

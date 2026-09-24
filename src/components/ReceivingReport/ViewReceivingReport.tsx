@@ -250,7 +250,7 @@ const ViewReceivingReport = ({
       const url = `/api/receiving-reports/${selectedRow.id}`;
       try {
         const response = await axiosInstance.delete(url);
-        toast.success("Receiving Report archived successfully!");
+        toast.success("Receiving Report hidden successfully!");
         setReceivingReports((prevRR) => ({
           ...prevRR,
           items: prevRR.items.map((RR) =>
@@ -260,7 +260,7 @@ const ViewReceivingReport = ({
         }));
       } catch (error: any) {
         toast.error(
-          `Error message: ${getErrorMessage(error, "Archive unsuccessful")}`,
+          `Error message: ${getErrorMessage(error, "Hide unsuccessful")}`,
         );
       }
     }
@@ -330,7 +330,7 @@ const ViewReceivingReport = ({
               <Option value="all">Active</Option>
               <Option value="unposted">Unposted</Option>
               <Option value="posted">Posted</Option>
-              <Option value="archived">Archived</Option>
+              <Option value="archived">Posted (Hidden)</Option>
             </Select>
           </FormControl>
           <DateRangeFilter
@@ -441,7 +441,7 @@ const ViewReceivingReport = ({
                 <th style={{ width: 120 }}>Tx. Date</th>
                 <th style={{ width: 320 }}>Supplier</th>
                 <th style={{ width: 180 }}>Ref No.</th>
-                <th style={{ width: 110 }}>Status</th>
+                <th style={{ width: 150, textAlign: "center" }}>Status</th>
                 <th style={{ width: 130, textAlign: "right" }}>Net Amount</th>
                 <th style={{ width: 130, textAlign: "right" }}>FOB Total</th>
                 <th style={{ width: 130, textAlign: "right" }}>
@@ -504,7 +504,7 @@ const ViewReceivingReport = ({
                     <td>
                       {withTooltip(receivingReport.reference_number, "160px")}
                     </td>
-                    <td>
+                    <td style={{ textAlign: "center" }}>
                       <StatusChip status={receivingReport.status} />
                     </td>
                     <td style={{ textAlign: "right" }}>
@@ -572,7 +572,7 @@ const ViewReceivingReport = ({
                             }}
                             disabled={receivingReport.status === "archived"}
                           >
-                            Archive
+                            Hide
                           </Button>
                         )}
 

@@ -4,7 +4,6 @@ import {
   Input,
   Textarea,
   Card,
-  Stack,
   Select,
   Option,
   Box,
@@ -70,8 +69,8 @@ const CPOFormDetails = ({
             )}
           </div>
           {openEdit && <Divider />}
-          <Stack direction="row" spacing={2} sx={{ mb: 1, mt: 1 }}>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+          <Box className="transaction-details__fields" sx={{ mb: 1, mt: 1 }}>
+            <FormControl size="sm">
               <FormLabel>Customer</FormLabel>
               <div className="flex">
                 <TooltipAutocomplete
@@ -91,7 +90,7 @@ const CPOFormDetails = ({
                 />
               </div>
             </FormControl>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+            <FormControl size="sm">
               <FormLabel>Status</FormLabel>
               <Select
                 onChange={(event, value) => {
@@ -103,10 +102,14 @@ const CPOFormDetails = ({
               >
                 <Option value="unposted">Unposted</Option>
                 <Option value="posted">Posted</Option>
+                {/* Display only - an archived record must never be created as one */}
+                {status === "archived" && (
+                  <Option value="archived">Archived</Option>
+                )}
               </Select>
             </FormControl>
 
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+            <FormControl size="sm">
               <FormLabel>Transaction Date</FormLabel>
               <Input
                 type="date"
@@ -116,7 +119,7 @@ const CPOFormDetails = ({
                 required
               />
             </FormControl>
-            <FormControl size="sm" sx={{ width: "22%" }}>
+            <FormControl size="sm">
               <FormLabel>Ref No.</FormLabel>
               <Input
                 size="sm"
@@ -126,9 +129,7 @@ const CPOFormDetails = ({
                 disabled={isEditDisabled}
               />
             </FormControl>
-          </Stack>
-          <Stack direction="row" spacing={2} sx={{ mb: 1, mt: 2 }}>
-            <FormControl size="sm" sx={{ width: "22%" }}>
+            <FormControl size="sm">
               <FormLabel>Cust Disc. 1 (%)</FormLabel>
               <Input
                 value={discounts.customer[0]}
@@ -139,7 +140,7 @@ const CPOFormDetails = ({
                 disabled={isEditDisabled}
               />
             </FormControl>
-            <FormControl size="sm" sx={{ width: "22%" }}>
+            <FormControl size="sm">
               <FormLabel>Trans Disc. 1 (%)</FormLabel>
               <Input
                 value={discounts.transaction[0]}
@@ -150,7 +151,7 @@ const CPOFormDetails = ({
                 disabled={isEditDisabled}
               />
             </FormControl>
-            <FormControl size="sm" sx={{ width: "22%" }}>
+            <FormControl size="sm">
               <FormLabel>Cust Disc. 2 (%)</FormLabel>
               <Input
                 value={discounts.customer[1]}
@@ -161,7 +162,7 @@ const CPOFormDetails = ({
                 disabled={isEditDisabled}
               />
             </FormControl>
-            <FormControl size="sm" sx={{ width: "22%" }}>
+            <FormControl size="sm">
               <FormLabel>Trans Disc. 2 (%)</FormLabel>
               <Input
                 value={discounts.transaction[1]}
@@ -172,48 +173,49 @@ const CPOFormDetails = ({
                 disabled={isEditDisabled}
               />
             </FormControl>
-          </Stack>
+          </Box>
         </div>
       </Card>
       <Card variant="soft" color="neutral">
         <div>
-          <div className="flex justify-around">
-            <FormControl size="sm" sx={{ mb: 1 }}>
-              <FormLabel>Gross Total</FormLabel>
-              <h5>{addCommaToNumberWithTwoPlaces(grossTotal)}</h5>{" "}
-            </FormControl>
-            <FormControl size="sm" sx={{ mb: 1 }}>
-              <FormLabel>NET Amount</FormLabel>
-              <h5>{addCommaToNumberWithTwoPlaces(netTotal)}</h5>
-            </FormControl>
-          </div>
+          <Box className="summary-figures" sx={{ mb: 1 }}>
+            <Typography level="body-sm">Gross Total</Typography>
+            <Typography level="title-sm">
+              {addCommaToNumberWithTwoPlaces(grossTotal)}
+            </Typography>
+
+            <Typography level="body-sm">NET Amount</Typography>
+            <Typography level="title-sm">
+              {addCommaToNumberWithTwoPlaces(netTotal)}
+            </Typography>
+          </Box>
           <Divider />
-          <Stack direction="row" spacing={2} sx={{ mb: 1, mt: 3.5 }}>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+          <Box className="transaction-details__fields" sx={{ mb: 1, mt: 3.5 }}>
+            <FormControl size="sm">
               <FormLabel>Created by</FormLabel>
               <p className="text-sm">
                 {selectedRow?.creator?.full_name ?? "-"}
               </p>
             </FormControl>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+            <FormControl size="sm">
               <FormLabel>Date Created</FormLabel>
               <p className="text-sm">
                 {formatToDateTime(selectedRow?.date_created)}
               </p>
             </FormControl>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+            <FormControl size="sm">
               <FormLabel>Modified by</FormLabel>
               <p className="text-sm">
                 {selectedRow?.modifier?.full_name ?? "-"}
               </p>
             </FormControl>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+            <FormControl size="sm">
               <FormLabel>Date Modified</FormLabel>
               <p className="text-sm">
                 {formatToDateTime(selectedRow?.date_modified)}
               </p>
             </FormControl>
-          </Stack>
+          </Box>
           <FormControl size="sm" sx={{ mb: 3, mt: 3 }}>
             <FormLabel>Remarks</FormLabel>
             <Textarea

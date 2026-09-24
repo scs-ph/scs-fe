@@ -251,11 +251,14 @@ const StockHistory = ({
                     boxShadow: "1px 0 var(--TableCell-borderColor)",
                     bgcolor: "background.level1",
                   },
-                  "& tr > *:not(:first-child)": {
+                  "& tbody tr > *:not(:first-child)": {
                     position: "relative",
                     zIndex: 0,
                   },
                   "& thead th": {
+                    // Below the sticky first column, so columns
+                    // scrolling sideways pass underneath it.
+                    zIndex: 1,
                     backgroundColor: "background.level1",
                   },
                 }}
@@ -267,28 +270,38 @@ const StockHistory = ({
                   </div>
                 ) : stockHistory.length > 0 ? (
                   <>
+                    <colgroup>
+                      {/* One definition of the column widths, used by both the
+                          header and the body. With a sticky first column the
+                          two can otherwise disagree, which offsets the whole
+                          header against the rows. */}
+                      <col style={{ width: 120 }} />
+                      <col style={{ width: 180 }} />
+                      <col style={{ width: 100 }} />
+                      <col style={{ width: 80 }} />
+                      <col style={{ width: 70 }} />
+                      <col style={{ width: 70 }} />
+                      <col style={{ width: 100 }} />
+                      <col style={{ width: 80 }} />
+                      <col style={{ width: 120 }} />
+                      <col style={{ width: 160 }} />
+                      <col style={{ width: 120 }} />
+                      <col style={{ width: 150 }} />
+                    </colgroup>
                     <thead>
                       <tr>
-                        <th style={{ width: 120 }}>Supplier</th>
-                        <th style={{ width: 180 }}>Customer</th>
-                        <th style={{ width: 100 }}>TX Date</th>
-                        <th style={{ width: 80, textAlign: "right" }}>TX #</th>
-                        <th style={{ width: 70, textAlign: "right" }}>Out</th>
-                        <th style={{ width: 70, textAlign: "right" }}>In</th>
-                        <th style={{ width: 100, textAlign: "right" }}>
-                          Price
-                        </th>
-                        <th style={{ width: 80 }}>Tx Type</th>
-                        <th style={{ width: 120, textAlign: "right" }}>
-                          Gross Amount
-                        </th>
-                        <th style={{ width: 160, textAlign: "right" }}>
-                          Tx Discounts (%)
-                        </th>
-                        <th style={{ width: 120, textAlign: "right" }}>
-                          NET Cost
-                        </th>
-                        <th style={{ width: 150 }}>Reference No.</th>
+                        <th>Supplier</th>
+                        <th>Customer</th>
+                        <th>TX Date</th>
+                        <th style={{ textAlign: "right" }}>TX #</th>
+                        <th style={{ textAlign: "right" }}>Out</th>
+                        <th style={{ textAlign: "right" }}>In</th>
+                        <th style={{ textAlign: "right" }}>Price</th>
+                        <th>Tx Type</th>
+                        <th style={{ textAlign: "right" }}>Gross Amount</th>
+                        <th style={{ textAlign: "right" }}>Tx Discounts (%)</th>
+                        <th style={{ textAlign: "right" }}>NET Cost</th>
+                        <th>Reference No.</th>
                       </tr>
                     </thead>
 

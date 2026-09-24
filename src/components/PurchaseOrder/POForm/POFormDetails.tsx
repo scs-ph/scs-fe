@@ -110,8 +110,8 @@ const POFormDetails = ({
           </div>
           {openEdit && <Divider />}
 
-          <Stack direction="row" spacing={2} sx={{ mb: 1, mt: 1 }}>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+          <Box className="transaction-details__fields" sx={{ mb: 1, mt: 1 }}>
+            <FormControl size="sm">
               <FormLabel>Supplier</FormLabel>
               <div className="flex">
                 <TooltipAutocomplete
@@ -129,7 +129,7 @@ const POFormDetails = ({
                 />
               </div>
             </FormControl>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+            <FormControl size="sm">
               <FormLabel>Status</FormLabel>
               <Select
                 onChange={(event, value) => {
@@ -147,9 +147,13 @@ const POFormDetails = ({
               >
                 <Option value="unposted">Unposted</Option>
                 <Option value="posted">Posted</Option>
+                {/* Display only - an archived record must never be created as one */}
+                {status === "archived" && (
+                  <Option value="archived">Archived</Option>
+                )}
               </Select>
             </FormControl>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+            <FormControl size="sm">
               <FormLabel>Transaction Date</FormLabel>
               <Input
                 type="date"
@@ -159,7 +163,7 @@ const POFormDetails = ({
                 required
               />
             </FormControl>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+            <FormControl size="sm">
               <FormLabel>Currency Used</FormLabel>
               <Select
                 onChange={(event, value) => {
@@ -177,101 +181,95 @@ const POFormDetails = ({
                 ))}
               </Select>
             </FormControl>
-          </Stack>
-          <Stack spacing={2} sx={{ mb: 1, mt: 2 }}>
-            <Stack direction="row" spacing={2}>
-              <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
-                <FormLabel>Philippine Peso Rate</FormLabel>
-                <Input
-                  startDecorator="₱"
-                  type="number"
-                  size="sm"
-                  placeholder="56"
-                  value={pesoRate}
-                  onChange={(e) => {
-                    setPesoRate(e.target.value);
-                  }}
-                  slotProps={{
-                    input: {
-                      min: 0,
-                      step: ".0001",
-                    },
-                  }}
-                  disabled={isEditDisabled}
-                  required
-                />
-              </FormControl>
-              <FormControl size="sm" sx={{ width: "22%" }}>
-                <FormLabel>Ref No.</FormLabel>
-                <Input
-                  size="sm"
-                  placeholder="Search"
-                  onChange={(e) => setReferenceNumber(e.target.value)}
-                  value={referenceNumber}
-                  disabled={isEditDisabled}
-                  required
-                />
-              </FormControl>
-              <FormControl size="sm" sx={{ width: "22%" }}>
-                <FormLabel>Supp Disc. 1</FormLabel>
-                <Input
-                  value={discounts.supplier[0]}
-                  onChange={(e) =>
-                    handleDiscountChange("supplier", 0, e.target.value)
-                  }
-                  placeholder="0"
-                  disabled={isEditDisabled}
-                />
-                <FormHelperText sx={{ fontSize: "11px" }}>
-                  Add &quot;%&quot; if percent disc.
-                </FormHelperText>
-              </FormControl>
-              <FormControl size="sm" sx={{ width: "22%" }}>
-                <FormLabel>Trans Disc. 1</FormLabel>
-                <Input
-                  value={discounts.transaction[0]}
-                  onChange={(e) =>
-                    handleDiscountChange("transaction", 0, e.target.value)
-                  }
-                  placeholder="0"
-                  disabled={isEditDisabled}
-                />
-                <FormHelperText sx={{ fontSize: "11px" }}>
-                  Add &quot;%&quot; if percent disc.
-                </FormHelperText>
-              </FormControl>
-            </Stack>
-            <Stack direction="row" spacing={2}>
-              <FormControl size="sm" sx={{ width: "22%" }}>
-                <FormLabel>Supp Disc. 2</FormLabel>
-                <Input
-                  value={discounts.supplier[1]}
-                  onChange={(e) =>
-                    handleDiscountChange("supplier", 1, e.target.value)
-                  }
-                  placeholder="0"
-                  disabled={isEditDisabled}
-                />
-                <FormHelperText sx={{ fontSize: "11px" }}>
-                  Add &quot;%&quot; if percent disc.
-                </FormHelperText>
-              </FormControl>
-              <FormControl size="sm" sx={{ width: "22%" }}>
-                <FormLabel>Trans Disc. 2</FormLabel>
-                <Input
-                  value={discounts.transaction[1]}
-                  onChange={(e) =>
-                    handleDiscountChange("transaction", 1, e.target.value)
-                  }
-                  placeholder="0"
-                  disabled={isEditDisabled}
-                />
-                <FormHelperText sx={{ fontSize: "11px" }}>
-                  Add &quot;%&quot; if percent disc.
-                </FormHelperText>
-              </FormControl>
-            </Stack>
-          </Stack>
+            <FormControl size="sm">
+              <FormLabel>Philippine Peso Rate</FormLabel>
+              <Input
+                startDecorator="₱"
+                type="number"
+                size="sm"
+                placeholder="56"
+                value={pesoRate}
+                onChange={(e) => {
+                  setPesoRate(e.target.value);
+                }}
+                slotProps={{
+                  input: {
+                    min: 0,
+                    step: ".0001",
+                  },
+                }}
+                disabled={isEditDisabled}
+                required
+              />
+            </FormControl>
+            <FormControl size="sm">
+              <FormLabel>Ref No.</FormLabel>
+              <Input
+                size="sm"
+                placeholder="Search"
+                onChange={(e) => setReferenceNumber(e.target.value)}
+                value={referenceNumber}
+                disabled={isEditDisabled}
+                required
+              />
+            </FormControl>
+            <FormControl size="sm">
+              <FormLabel>Supp Disc. 1</FormLabel>
+              <Input
+                value={discounts.supplier[0]}
+                onChange={(e) =>
+                  handleDiscountChange("supplier", 0, e.target.value)
+                }
+                placeholder="0"
+                disabled={isEditDisabled}
+              />
+              <FormHelperText sx={{ fontSize: "11px" }}>
+                Add &quot;%&quot; if percent disc.
+              </FormHelperText>
+            </FormControl>
+            <FormControl size="sm">
+              <FormLabel>Trans Disc. 1</FormLabel>
+              <Input
+                value={discounts.transaction[0]}
+                onChange={(e) =>
+                  handleDiscountChange("transaction", 0, e.target.value)
+                }
+                placeholder="0"
+                disabled={isEditDisabled}
+              />
+              <FormHelperText sx={{ fontSize: "11px" }}>
+                Add &quot;%&quot; if percent disc.
+              </FormHelperText>
+            </FormControl>
+            <FormControl size="sm">
+              <FormLabel>Supp Disc. 2</FormLabel>
+              <Input
+                value={discounts.supplier[1]}
+                onChange={(e) =>
+                  handleDiscountChange("supplier", 1, e.target.value)
+                }
+                placeholder="0"
+                disabled={isEditDisabled}
+              />
+              <FormHelperText sx={{ fontSize: "11px" }}>
+                Add &quot;%&quot; if percent disc.
+              </FormHelperText>
+            </FormControl>
+            <FormControl size="sm">
+              <FormLabel>Trans Disc. 2</FormLabel>
+              <Input
+                value={discounts.transaction[1]}
+                onChange={(e) =>
+                  handleDiscountChange("transaction", 1, e.target.value)
+                }
+                placeholder="0"
+                disabled={isEditDisabled}
+              />
+              <FormHelperText sx={{ fontSize: "11px" }}>
+                Add &quot;%&quot; if percent disc.
+              </FormHelperText>
+            </FormControl>
+          </Box>
         </div>
       </Card>
       <Card variant="soft" color="neutral">
@@ -289,72 +287,63 @@ const POFormDetails = ({
             </Button>
           </div>
           {showTotals === true && (
-            <>
-              <div className="flex justify-around">
-                <FormControl size="sm" sx={{ mb: 1 }}>
-                  <FormLabel>FOB Total</FormLabel>
-                  <h5>{`${currencyUsed} ${addCommaToNumberWithTwoPlaces(fobTotal)}`}</h5>
-                </FormControl>
-                <FormControl size="sm" sx={{ mb: 1 }}>
-                  <FormLabel>NET Amount</FormLabel>
-                  <h5>{`${currencyUsed} ${addCommaToNumberWithTwoPlaces(netAmount)}`}</h5>
-                </FormControl>
-                <FormControl size="sm" sx={{ mb: 1 }}>
-                  <FormLabel>LANDED Total</FormLabel>
-                  <h5>{`${currencyUsed} ${addCommaToNumberWithTwoPlaces(landedTotal / Number(pesoRate))}`}</h5>
-                </FormControl>
-              </div>
-              <div className="flex justify-around">
-                <FormControl size="sm" sx={{ mb: 1 }}>
-                  <FormLabel>FOB Total</FormLabel>
-                  <h5>
-                    ₱
-                    {addCommaToNumberWithTwoPlaces(fobTotal * Number(pesoRate))}
-                  </h5>
-                </FormControl>
-                <FormControl size="sm" sx={{ mb: 1 }}>
-                  <FormLabel>NET Amount</FormLabel>
-                  <h5>
-                    ₱
-                    {addCommaToNumberWithTwoPlaces(
-                      netAmount * Number(pesoRate),
-                    )}
-                  </h5>
-                </FormControl>
-                <FormControl size="sm" sx={{ mb: 1 }}>
-                  <FormLabel>LANDED Total</FormLabel>
-                  <h5>₱{addCommaToNumberWithFourPlaces(landedTotal)}</h5>
-                </FormControl>
-              </div>
-            </>
+            <Box className="order-summary__totals" sx={{ mb: 1 }}>
+              <span />
+              <Typography level="body-xs">{currencyUsed}</Typography>
+              <Typography level="body-xs">PHP</Typography>
+
+              <Typography level="body-sm">FOB Total</Typography>
+              <Typography level="title-sm">
+                {addCommaToNumberWithTwoPlaces(fobTotal)}
+              </Typography>
+              <Typography level="title-sm">
+                {addCommaToNumberWithTwoPlaces(fobTotal * Number(pesoRate))}
+              </Typography>
+
+              <Typography level="body-sm">NET Amount</Typography>
+              <Typography level="title-sm">
+                {addCommaToNumberWithTwoPlaces(netAmount)}
+              </Typography>
+              <Typography level="title-sm">
+                {addCommaToNumberWithTwoPlaces(netAmount * Number(pesoRate))}
+              </Typography>
+
+              <Typography level="body-sm">LANDED Total</Typography>
+              <Typography level="title-sm">
+                {addCommaToNumberWithTwoPlaces(landedTotal / Number(pesoRate))}
+              </Typography>
+              <Typography level="title-sm">
+                {addCommaToNumberWithFourPlaces(landedTotal)}
+              </Typography>
+            </Box>
           )}
           <Divider />
-          <Stack direction="row" spacing={2} sx={{ mb: 1, mt: 1 }}>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+          <Box className="transaction-details__fields" sx={{ mb: 1, mt: 1 }}>
+            <FormControl size="sm">
               <FormLabel>Created by</FormLabel>
               <p className="text-sm">
                 {selectedRow?.creator?.full_name ?? "-"}
               </p>
             </FormControl>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+            <FormControl size="sm">
               <FormLabel>Date Created</FormLabel>
               <p className="text-sm">
                 {formatToDateTime(selectedRow?.date_created)}
               </p>
             </FormControl>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+            <FormControl size="sm">
               <FormLabel>Modified by</FormLabel>
               <p className="text-sm">
                 {selectedRow?.modifier?.full_name ?? "-"}
               </p>
             </FormControl>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+            <FormControl size="sm">
               <FormLabel>Date Modified</FormLabel>
               <p className="text-sm">
                 {formatToDateTime(selectedRow?.date_modified)}
               </p>
             </FormControl>
-          </Stack>
+          </Box>
           <Stack direction="row" spacing={2} sx={{ mb: 1, mt: 2 }}>
             <FormControl size="sm" sx={{ mb: 3, width: "100%" }}>
               <FormLabel>Remarks</FormLabel>

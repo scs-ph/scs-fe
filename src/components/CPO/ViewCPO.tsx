@@ -240,7 +240,7 @@ const ViewCPO = ({
       const url = `/api/customer_purchase_orders/${selectedRow.id}`;
       try {
         const response = await axiosInstance.delete(url);
-        toast.success("CPO archived successfully!");
+        toast.success("CPO hidden successfully!");
         const archivedCPO = response.data;
         setCPOs((prevCPO) => ({
           ...prevCPO,
@@ -250,7 +250,7 @@ const ViewCPO = ({
         }));
       } catch (error: any) {
         toast.error(
-          `Error message: ${getErrorMessage(error, "Archive unsuccessful")}`,
+          `Error message: ${getErrorMessage(error, "Hide unsuccessful")}`,
         );
       }
     }
@@ -318,9 +318,9 @@ const ViewCPO = ({
               value={status}
             >
               <Option value="all">Active</Option>
-              <Option value="posted">Posted</Option>
               <Option value="unposted">Unposted</Option>
-              <Option value="archived">Archived</Option>
+              <Option value="posted">Posted</Option>
+              <Option value="archived">Posted (Hidden)</Option>
             </Select>
           </FormControl>
           <DateRangeFilter
@@ -431,7 +431,7 @@ const ViewCPO = ({
                 <th style={{ width: 120 }}>Tx. Date</th>
                 <th style={{ width: 250 }}>Customer</th>
                 <th style={{ width: 220 }}>Ref No.</th>
-                <th style={{ width: 110 }}>Status</th>
+                <th style={{ width: 150, textAlign: "center" }}>Status</th>
                 <th style={{ width: 150, textAlign: "right" }}>Net Amount</th>
                 <th style={{ width: 150, textAlign: "right" }}>Gross Amount</th>
                 <th style={{ width: 200 }}>Remarks</th>
@@ -485,7 +485,7 @@ const ViewCPO = ({
                     <td>{CPO.transaction_date}</td>
                     <td>{withTooltip(CPO?.customer?.name, "280px")}</td>
                     <td>{withTooltip(CPO.reference_number, "200px")}</td>
-                    <td>
+                    <td style={{ textAlign: "center" }}>
                       <StatusChip status={CPO.status} />
                     </td>
                     <td style={{ textAlign: "right" }}>
@@ -533,7 +533,7 @@ const ViewCPO = ({
                             }}
                             disabled={CPO.status === "archived"}
                           >
-                            Archive
+                            Hide
                           </Button>
                         )}
                         {CPO.status === "unposted" && (

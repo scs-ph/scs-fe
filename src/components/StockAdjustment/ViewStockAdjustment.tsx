@@ -339,7 +339,15 @@ const ViewStockAdjustment = ({
                 <th style={{ width: 90, padding: "12px 6px" }}>Date</th>
                 <th style={{ width: 130, padding: "12px 6px" }}>Stock Code</th>
                 <th style={{ width: 180, padding: "12px 6px" }}>Stock Name</th>
-                <th style={{ width: 80, padding: "12px 6px" }}>Type</th>
+                <th
+                  style={{
+                    width: 80,
+                    padding: "12px 6px",
+                    textAlign: "center",
+                  }}
+                >
+                  Type
+                </th>
                 <th
                   style={{ width: 50, padding: "12px 6px", textAlign: "right" }}
                 >
@@ -393,7 +401,7 @@ const ViewStockAdjustment = ({
                       <td>{withTooltip(adjustment.stock_code, 120)}</td>
                       <td>{withTooltip(adjustment.item_name, 200)}</td>
 
-                      <td>
+                      <td style={{ textAlign: "center" }}>
                         <AdjustmentTypeChip
                           adjustmentType={adjustment.adjustment_type}
                         />

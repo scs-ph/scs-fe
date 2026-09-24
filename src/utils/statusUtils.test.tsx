@@ -5,6 +5,8 @@ import {
   formatStatusText,
   getAdjustmentTypeColor,
   getStatusColor,
+  getPaymentStatusColor,
+  getStatusLabel,
   getStatusVariant,
   isTransactionCancelled,
   isTransactionPosted,
@@ -15,10 +17,30 @@ describe("status contracts", () => {
     ["posted", "success"],
     ["unposted", "warning"],
     ["cancelled", "danger"],
-    ["archived", "warning"],
+    // An archived record is still posted, so it shares Posted's colour.
+    ["archived", "success"],
     ["unknown", "primary"],
   ] as const)("maps %s to %s", (status, color) => {
     expect(getStatusColor(status)).toBe(color);
+  });
+
+  it.each([
+    ["cleared", "success"],
+    ["pending", "warning"],
+    ["reversed", "danger"],
+    ["cancelled", "danger"],
+    ["unknown", "primary"],
+  ] as const)("maps payment status %s to %s", (paymentStatus, color) => {
+    expect(getPaymentStatusColor(paymentStatus)).toBe(color);
+  });
+
+  it("labels archived records as still posted", () => {
+    expect(getStatusLabel("archived")).toBe("Posted (Hidden)");
+    expect(getStatusLabel("ARCHIVED")).toBe("Posted (Hidden)");
+    expect(formatStatusText("archived")).toBe("POSTED (HIDDEN)");
+    // Other statuses are passed through untouched.
+    expect(getStatusLabel("posted")).toBe("posted");
+    expect(getStatusLabel("unposted")).toBe("unposted");
   });
 
   it("preserves current transaction action rules", () => {

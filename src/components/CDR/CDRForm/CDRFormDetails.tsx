@@ -4,7 +4,6 @@ import {
   Input,
   Textarea,
   Card,
-  Stack,
   Select,
   Option,
   Box,
@@ -186,8 +185,8 @@ const CDRFormDetails = ({
           </div>
           {openEdit && <Divider />}
 
-          <Stack direction="row" spacing={2} sx={{ mb: 1, mt: 1 }}>
-            <FormControl size="sm" sx={{ mb: 1, mt: 1, width: "22.5%" }}>
+          <Box className="transaction-details__fields" sx={{ mb: 1, mt: 1 }}>
+            <FormControl size="sm">
               <FormLabel>Customer</FormLabel>
               <div className="flex">
                 <TooltipAutocomplete
@@ -209,7 +208,7 @@ const CDRFormDetails = ({
                 />
               </div>
             </FormControl>
-            <FormControl size="sm" sx={{ mb: 1, mt: 1, width: "22.5%" }}>
+            <FormControl size="sm">
               <FormLabel>CDP No.</FormLabel>
               <div className="flex">
                 <TooltipAutocomplete
@@ -284,7 +283,7 @@ const CDRFormDetails = ({
                 />
               </div>
             </FormControl>
-            <FormControl size="sm" sx={{ mb: 1, width: "22.5%" }}>
+            <FormControl size="sm">
               <FormLabel>Status</FormLabel>
               <Select
                 onChange={(event, value) => {
@@ -296,9 +295,13 @@ const CDRFormDetails = ({
               >
                 <Option value="posted">Posted</Option>
                 <Option value="unposted">Unposted</Option>
+                {/* Display only - an archived record must never be created as one */}
+                {status === "archived" && (
+                  <Option value="archived">Archived</Option>
+                )}
               </Select>
             </FormControl>
-            <FormControl size="sm" sx={{ mb: 1, width: "22.5%" }}>
+            <FormControl size="sm">
               <FormLabel>Transaction Date</FormLabel>
               <Input
                 type="date"
@@ -308,13 +311,7 @@ const CDRFormDetails = ({
                 required
               />
             </FormControl>
-          </Stack>
-          <Stack
-            direction="row"
-            spacing={2}
-            sx={{ mt: 1, mb: 1, alignItems: "flex-end" }}
-          >
-            <FormControl size="sm" sx={{ mb: 1, width: "22.5%" }}>
+            <FormControl size="sm">
               <FormLabel>Ref No.</FormLabel>
               <TooltipInput
                 size="sm"
@@ -324,7 +321,7 @@ const CDRFormDetails = ({
                 disabled
               />
             </FormControl>
-            <FormControl size="sm" sx={{ mb: 1, width: "22.5%" }}>
+            <FormControl size="sm">
               <FormLabel>Remarks</FormLabel>
               <Textarea
                 minRows={1}
@@ -334,52 +331,52 @@ const CDRFormDetails = ({
                 disabled={isEditDisabled}
               />
             </FormControl>
-          </Stack>
+          </Box>
         </div>
       </Card>
       <Card variant="soft" color="neutral">
         <div>
-          <div className="flex justify-around">
-            <FormControl size="sm" sx={{ mb: 1 }}>
-              <FormLabel>Total Qty</FormLabel>
-              <h5>{totalItems}</h5>{" "}
-            </FormControl>
-            <FormControl size="sm" sx={{ mb: 1 }}>
-              <FormLabel>Total Gross</FormLabel>
-              <h5>{`${addCommaToNumberWithTwoPlaces(totalGross)}`}</h5>
-            </FormControl>
-            <FormControl size="sm" sx={{ mb: 1 }}>
-              <FormLabel>Total NET</FormLabel>
-              <h5>{`${addCommaToNumberWithTwoPlaces(totalNet)}`}</h5>
-            </FormControl>
-          </div>
+          <Box className="summary-figures" sx={{ mb: 1 }}>
+            <Typography level="body-sm">Total Qty</Typography>
+            <Typography level="title-sm">{totalItems}</Typography>
+
+            <Typography level="body-sm">Total Gross</Typography>
+            <Typography level="title-sm">
+              {addCommaToNumberWithTwoPlaces(totalGross)}
+            </Typography>
+
+            <Typography level="body-sm">Total NET</Typography>
+            <Typography level="title-sm">
+              {addCommaToNumberWithTwoPlaces(totalNet)}
+            </Typography>
+          </Box>
           <Divider />
-          <Stack direction="row" spacing={2} sx={{ mb: 2, mt: 2 }}>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+          <Box className="transaction-details__fields" sx={{ mb: 2, mt: 2 }}>
+            <FormControl size="sm">
               <FormLabel>Created by</FormLabel>
               <p className="text-sm">
                 {selectedRow?.creator?.full_name ?? "-"}
               </p>
             </FormControl>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+            <FormControl size="sm">
               <FormLabel>Date Created</FormLabel>
               <p className="text-sm">
                 {formatToDateTime(selectedRow?.date_created)}
               </p>
             </FormControl>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+            <FormControl size="sm">
               <FormLabel>Modified by</FormLabel>
               <p className="text-sm">
                 {selectedRow?.modifier?.full_name ?? "-"}
               </p>
             </FormControl>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+            <FormControl size="sm">
               <FormLabel>Date Modified</FormLabel>
               <p className="text-sm">
                 {formatToDateTime(selectedRow?.date_modified)}
               </p>
             </FormControl>
-          </Stack>
+          </Box>
         </div>
       </Card>
     </Box>

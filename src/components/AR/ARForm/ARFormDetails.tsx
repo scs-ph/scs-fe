@@ -1,16 +1,19 @@
+import { useState } from "react";
 import {
   FormControl,
   FormLabel,
   Input,
   Textarea,
   Card,
-  Stack,
   Select,
   Option,
   Box,
+  Button,
   Divider,
   Typography,
 } from "@mui/joy";
+import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
+import ExpandLessRoundedIcon from "@mui/icons-material/ExpandLessRounded";
 import type { ARFormDetailsProps } from "../interface";
 import {
   formatToDateTime,
@@ -60,6 +63,7 @@ const ARFormDetails = ({
   outstandingTrans,
   setOutstandingTrans,
 }: ARFormDetailsProps): JSX.Element => {
+  const [showAuditDetails, setShowAuditDetails] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleDRFilter = (
     event: React.SyntheticEvent,
@@ -125,8 +129,8 @@ const ARFormDetails = ({
           </div>
           {openEdit && <Divider />}
 
-          <Stack direction="row" spacing={2} sx={{ mb: 1, mt: 1 }}>
-            <FormControl size="sm" sx={{ mb: 1, mt: 1, width: "22%" }}>
+          <Box className="transaction-details__fields" sx={{ mb: 1, mt: 1 }}>
+            <FormControl size="sm">
               <FormLabel>Customer</FormLabel>
               <div className="flex">
                 <TooltipAutocomplete
@@ -148,7 +152,7 @@ const ARFormDetails = ({
                 />
               </div>
             </FormControl>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+            <FormControl size="sm">
               <FormLabel>Status</FormLabel>
               <Select
                 onChange={(event, value) => {
@@ -160,9 +164,13 @@ const ARFormDetails = ({
               >
                 <Option value="posted">Posted</Option>
                 <Option value="unposted">Unposted</Option>
+                {/* Display only - an archived record must never be created as one */}
+                {status === "archived" && (
+                  <Option value="archived">Archived</Option>
+                )}
               </Select>
             </FormControl>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+            <FormControl size="sm">
               <FormLabel>Transaction Date</FormLabel>
               <Input
                 type="date"
@@ -172,7 +180,7 @@ const ARFormDetails = ({
                 required
               />
             </FormControl>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+            <FormControl size="sm">
               <FormLabel>Payment Mode</FormLabel>
               <Select
                 onChange={(event, value) => {
@@ -187,9 +195,7 @@ const ARFormDetails = ({
                 <Option value="check">Check</Option>
               </Select>
             </FormControl>
-          </Stack>
-          <Stack direction="row" spacing={2} sx={{ mb: 1, mt: 1 }}>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+            <FormControl size="sm">
               <FormLabel>Amount Paid</FormLabel>
               <Input
                 type="number"
@@ -208,7 +214,7 @@ const ARFormDetails = ({
                 required
               />
             </FormControl>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+            <FormControl size="sm">
               <FormLabel>Check No.</FormLabel>
               <Input
                 type="text"
@@ -219,7 +225,7 @@ const ARFormDetails = ({
               />
             </FormControl>
             {paymentMode === "check" && (
-              <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+              <FormControl size="sm">
                 <FormLabel>Check Date</FormLabel>
                 <Input
                   type="date"
@@ -230,7 +236,7 @@ const ARFormDetails = ({
               </FormControl>
             )}
 
-            {/* <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+            {/* <FormControl size="sm">
               <FormLabel>DR No. Filter</FormLabel>
               <div className="flex">
                 <Autocomplete
@@ -245,24 +251,7 @@ const ARFormDetails = ({
                 />
               </div>
             </FormControl> */}
-          </Stack>
-        </div>
-      </Card>
-      <Card variant="soft" color="neutral">
-        <div>
-          <div className="flex justify-around">
-            <FormControl size="sm" sx={{ mb: 1 }}>
-              <FormLabel>Payment Amount</FormLabel>
-              <h5>{addCommaToNumberWithTwoPlaces(paymentAmount)}</h5>{" "}
-            </FormControl>
-            <FormControl size="sm" sx={{ mb: 1 }}>
-              <FormLabel>Total Applied</FormLabel>
-              <h5>{addCommaToNumberWithTwoPlaces(totalApplied)}</h5>
-            </FormControl>
-          </div>
-          <Divider />
-          <Stack direction="row" spacing={2} sx={{ mb: 1, mt: 1 }}>
-            <FormControl size="sm" sx={{ mb: 1, width: "30%" }}>
+            <FormControl size="sm">
               <FormLabel>Less</FormLabel>
               <Input
                 type="number"
@@ -280,37 +269,53 @@ const ARFormDetails = ({
                 disabled={isEditDisabled}
               />
             </FormControl>
-            <FormControl size="sm" sx={{ mb: 1, mt: 1, width: "30%" }}>
+            <FormControl size="sm">
               <FormLabel>Add</FormLabel>
-              <div className="flex">
-                <Input
-                  type="number"
-                  name="addAmount1"
-                  size="sm"
-                  placeholder="0"
-                  value={addAmount1}
-                  slotProps={{
-                    input: {
-                      min: 0,
-                      step: 0.01,
-                    },
-                  }}
-                  onChange={(e) => setAddAmount1(String(e.target.value))}
-                  disabled={isEditDisabled}
-                />
-              </div>
+              <Input
+                type="number"
+                name="addAmount1"
+                size="sm"
+                placeholder="0"
+                value={addAmount1}
+                slotProps={{
+                  input: {
+                    min: 0,
+                    step: 0.01,
+                  },
+                }}
+                onChange={(e) => setAddAmount1(String(e.target.value))}
+                disabled={isEditDisabled}
+              />
             </FormControl>
-            <FormControl size="sm" sx={{ mb: 1, width: "30%" }}>
+          </Box>
+        </div>
+      </Card>
+      <Card variant="soft" color="neutral">
+        <div>
+          <Box className="summary-figures" sx={{ mb: 1 }}>
+            <Typography level="body-sm">Payment Amount</Typography>
+            <Typography level="title-sm">
+              {addCommaToNumberWithTwoPlaces(paymentAmount)}
+            </Typography>
+
+            <Typography level="body-sm">Total Applied</Typography>
+            <Typography level="title-sm">
+              {addCommaToNumberWithTwoPlaces(totalApplied)}
+            </Typography>
+          </Box>
+          <Divider />
+          <Box className="transaction-details__fields" sx={{ mb: 1, mt: 1 }}>
+            <FormControl size="sm" sx={{ gridColumn: "1 / -1" }}>
               <FormLabel>Remarks</FormLabel>
               <Textarea
-                minRows={1}
+                minRows={2}
                 placeholder="Remarks"
                 onChange={(e) => setRemarks(e.target.value)}
                 value={remarks}
                 disabled={isEditDisabled}
               />
             </FormControl>
-            {/* <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+            {/* <FormControl size="sm">
               <FormLabel>Add 2</FormLabel>
               <Input
                 type="number"
@@ -328,7 +333,7 @@ const ARFormDetails = ({
                 required
               />
             </FormControl>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+            <FormControl size="sm">
               <FormLabel>Add 3</FormLabel>
               <Input
                 type="number"
@@ -346,35 +351,60 @@ const ARFormDetails = ({
                 required
               />
             </FormControl> */}
-          </Stack>
+          </Box>
 
-          <Divider />
-          <Stack direction="row" spacing={2} sx={{ mb: 2, mt: 2 }}>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
-              <FormLabel>Created by</FormLabel>
-              <p className="text-sm">
-                {selectedRow?.creator?.full_name ?? "-"}
-              </p>
-            </FormControl>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
-              <FormLabel>Date Created</FormLabel>
-              <p className="text-sm">
-                {formatToDateTime(selectedRow?.date_created)}
-              </p>
-            </FormControl>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
-              <FormLabel>Modified by</FormLabel>
-              <p className="text-sm">
-                {selectedRow?.modifier?.full_name ?? "-"}
-              </p>
-            </FormControl>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
-              <FormLabel>Date Modified</FormLabel>
-              <p className="text-sm">
-                {formatToDateTime(selectedRow?.date_modified)}
-              </p>
-            </FormControl>
-          </Stack>
+          {selectedRow !== undefined && (
+            <>
+              <Divider />
+              <Button
+                size="sm"
+                variant="plain"
+                color="neutral"
+                onClick={() => setShowAuditDetails((prev) => !prev)}
+                startDecorator={
+                  showAuditDetails ? (
+                    <ExpandLessRoundedIcon />
+                  ) : (
+                    <ExpandMoreRoundedIcon />
+                  )
+                }
+                sx={{ mt: 1, alignSelf: "flex-start", px: 0.5 }}
+              >
+                {showAuditDetails ? "Hide record details" : "Record details"}
+              </Button>
+              {showAuditDetails && (
+                <Box
+                  className="transaction-details__fields"
+                  sx={{ mb: 2, mt: 1 }}
+                >
+                  <FormControl size="sm">
+                    <FormLabel>Created by</FormLabel>
+                    <p className="text-sm">
+                      {selectedRow?.creator?.full_name ?? "-"}
+                    </p>
+                  </FormControl>
+                  <FormControl size="sm">
+                    <FormLabel>Date Created</FormLabel>
+                    <p className="text-sm">
+                      {formatToDateTime(selectedRow?.date_created)}
+                    </p>
+                  </FormControl>
+                  <FormControl size="sm">
+                    <FormLabel>Modified by</FormLabel>
+                    <p className="text-sm">
+                      {selectedRow?.modifier?.full_name ?? "-"}
+                    </p>
+                  </FormControl>
+                  <FormControl size="sm">
+                    <FormLabel>Date Modified</FormLabel>
+                    <p className="text-sm">
+                      {formatToDateTime(selectedRow?.date_modified)}
+                    </p>
+                  </FormControl>
+                </Box>
+              )}
+            </>
+          )}
         </div>
       </Card>
     </Box>

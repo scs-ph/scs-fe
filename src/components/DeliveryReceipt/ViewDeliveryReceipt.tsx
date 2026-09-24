@@ -249,7 +249,7 @@ const ViewDeliveryReceipt = ({
       const url = `/api/supplier-delivery-receipts/${selectedRow.id}`;
       try {
         await axiosInstance.delete(url);
-        toast.success("Delivery Receipt archived successfully!");
+        toast.success("Delivery Receipt hidden successfully!");
         setDeliveryReceipts((prevSDR) => ({
           ...prevSDR,
           items: prevSDR.items.map((SDR) =>
@@ -259,7 +259,7 @@ const ViewDeliveryReceipt = ({
         }));
       } catch (error: any) {
         toast.error(
-          `Error message: ${getErrorMessage(error, "Archive unsuccessful")}`,
+          `Error message: ${getErrorMessage(error, "Hide unsuccessful")}`,
         );
       }
     }
@@ -329,7 +329,7 @@ const ViewDeliveryReceipt = ({
               <Option value="all">Active</Option>
               <Option value="unposted">Unposted</Option>
               <Option value="posted">Posted</Option>
-              <Option value="archived">Archived</Option>
+              <Option value="archived">Posted (Hidden)</Option>
             </Select>
           </FormControl>
           <DateRangeFilter
@@ -440,7 +440,7 @@ const ViewDeliveryReceipt = ({
                 <th style={{ width: 120 }}>Tx. Date</th>
                 <th style={{ width: 250 }}>Supplier</th>
                 <th style={{ width: 180 }}>Ref No.</th>
-                <th style={{ width: 110 }}>Status</th>
+                <th style={{ width: 150, textAlign: "center" }}>Status</th>
                 <th style={{ width: 130, textAlign: "right" }}>Net Amount</th>
                 <th style={{ width: 130, textAlign: "right" }}>FOB Total</th>
                 <th style={{ width: 130, textAlign: "right" }}>
@@ -501,7 +501,7 @@ const ViewDeliveryReceipt = ({
                     <td>
                       {withTooltip(deliveryReceipt.reference_number, "160px")}
                     </td>
-                    <td>
+                    <td style={{ textAlign: "center" }}>
                       <StatusChip status={deliveryReceipt.status} />
                     </td>
                     <td style={{ textAlign: "right" }}>
@@ -559,7 +559,7 @@ const ViewDeliveryReceipt = ({
                             }}
                             disabled={deliveryReceipt.status === "archived"}
                           >
-                            Archive
+                            Hide
                           </Button>
                         )}
 

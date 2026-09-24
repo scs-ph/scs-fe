@@ -599,6 +599,8 @@ export interface ARFormProps {
   selectedRow?: AR;
   title: string;
   isAdmin?: boolean;
+  /** Start a fresh receipt without returning to the list first. */
+  onStartNew?: () => void;
 }
 
 export interface ViewPurchaseOrderProps {

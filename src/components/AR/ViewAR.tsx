@@ -29,7 +29,11 @@ import {
   addCommaToNumberWithTwoPlaces,
   getErrorMessage,
 } from "../../helper";
-import { StatusChip } from "../../utils/statusUtils";
+import {
+  PaymentMethodChip,
+  PaymentStatusChip,
+  StatusChip,
+} from "../../utils/statusUtils";
 import { withTooltip } from "../shared/withTooltip";
 import DateRangeFilter, {
   getDefaultDateFrom,
@@ -263,7 +267,7 @@ const ViewAR = ({
       const url = `/api/ar-receipts/${selectedRow.id}`;
       try {
         const response = await axiosInstance.delete(url);
-        toast.success("Archive successful!");
+        toast.success("Hide successful!");
         const archivedAR = response.data;
         setARs((prevAR) => ({
           ...prevAR,
@@ -273,7 +277,7 @@ const ViewAR = ({
         }));
       } catch (error: any) {
         toast.error(
-          `Error message: ${getErrorMessage(error, "Archive unsuccessful")}`,
+          `Error message: ${getErrorMessage(error, "Hide unsuccessful")}`,
         );
       }
     }
@@ -343,9 +347,9 @@ const ViewAR = ({
               value={status}
             >
               <Option value="all">Active</Option>
-              <Option value="posted">Posted</Option>
               <Option value="unposted">Unposted</Option>
-              <Option value="archived">Archived</Option>
+              <Option value="posted">Posted</Option>
+              <Option value="archived">Posted (Hidden)</Option>
             </Select>
           </FormControl>
           <FormControl>
@@ -475,12 +479,14 @@ const ViewAR = ({
                 <th style={{ width: 120 }}>Tx. Date</th>
                 <th style={{ width: 250 }}>Customer</th>
                 <th style={{ width: 150 }}>Check No.</th>
-                <th style={{ width: 110 }}>Status</th>
+                <th style={{ width: 150, textAlign: "center" }}>Status</th>
                 <th style={{ width: 150, textAlign: "right" }}>
                   Payment Amount
                 </th>
-                <th style={{ width: 150 }}>Payment Status</th>
-                <th style={{ width: 100 }}>Method</th>
+                <th style={{ width: 110, textAlign: "center" }}>
+                  Payment Status
+                </th>
+                <th style={{ width: 100, textAlign: "center" }}>Method</th>
                 <th style={{ width: 200 }}>Remarks</th>
                 <th style={{ width: 150 }}>Created By</th>
                 <th style={{ width: 150 }}>Modified By</th>
@@ -496,7 +502,7 @@ const ViewAR = ({
               <TableLoadingRows
                 columns={14}
                 numericColumns={[5]}
-                statusColumns={[4, 6]}
+                statusColumns={[4, 6, 7]}
                 actionColumn={13}
                 actionCount={2}
               />
@@ -534,7 +540,7 @@ const ViewAR = ({
                     <td>{AR.transaction_date}</td>
                     <td>{withTooltip(AR.customer.name, "280px")}</td>
                     <td>{withTooltip(AR.reference_number, "160px")}</td>
-                    <td>
+                    <td style={{ textAlign: "center" }}>
                       <StatusChip status={AR.status} />
                     </td>
                     <td style={{ textAlign: "right" }}>
@@ -542,8 +548,12 @@ const ViewAR = ({
                         ? addCommaToNumberWithTwoPlaces(AR.payment_amount)
                         : "N/A"}
                     </td>
-                    <td className="capitalize">{AR.payment_status}</td>
-                    <td className="capitalize">{AR.payment_method}</td>
+                    <td style={{ textAlign: "center" }}>
+                      <PaymentStatusChip paymentStatus={AR.payment_status} />
+                    </td>
+                    <td style={{ textAlign: "center" }}>
+                      <PaymentMethodChip paymentMethod={AR.payment_method} />
+                    </td>
                     <td>{withTooltip(AR.remarks, "180px")}</td>
                     <td>{withTooltip(AR?.creator?.username, "130px")}</td>
                     <td>{withTooltip(AR?.modifier?.username, "130px")}</td>
@@ -586,7 +596,7 @@ const ViewAR = ({
                               }}
                               disabled={AR.status === "archived"}
                             >
-                              Archive
+                              Hide
                             </Button>
                           )}
                         {isAdmin && AR.status === "unposted" && (

@@ -35,10 +35,10 @@ const ArchiveConfirmModal = ({
         >
           <ModalClose variant="plain" sx={{ m: 1 }} />
           <Box>
-            <h4 className="mb-6">Archive {transactionType}</h4>
+            <h4 className="mb-6">Hide {transactionType}</h4>
             <div className="mb-7">
               <p className="text-sm">
-                Are you sure you want to archive this {transactionType}?
+                Are you sure you want to hide this {transactionType}?
               </p>
             </div>
             <div className="flex justify-end mt-5">
@@ -63,7 +63,7 @@ const ArchiveConfirmModal = ({
                   setOpen(false);
                 }}
               >
-                Archive
+                Hide
               </Button>
             </div>
           </Box>

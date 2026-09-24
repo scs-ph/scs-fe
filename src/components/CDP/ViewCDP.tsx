@@ -249,7 +249,7 @@ const ViewCDP = ({
       const url = `/api/delivery-plans/${selectedRow.id}`;
       try {
         const response = await axiosInstance.delete(url);
-        toast.success("Delivery Plan archived successfully!");
+        toast.success("Delivery Plan hidden successfully!");
         setCDPs((prevCDP) => ({
           ...prevCDP,
           items: prevCDP.items.map((CDP) =>
@@ -259,7 +259,7 @@ const ViewCDP = ({
         }));
       } catch (error: any) {
         toast.error(
-          `Error message: ${getErrorMessage(error, "Archive unsuccessful")}`,
+          `Error message: ${getErrorMessage(error, "Hide unsuccessful")}`,
         );
       }
     }
@@ -329,7 +329,7 @@ const ViewCDP = ({
               <Option value="all">Active</Option>
               <Option value="unposted">Unposted</Option>
               <Option value="posted">Posted</Option>
-              <Option value="archived">Archived</Option>
+              <Option value="archived">Posted (Hidden)</Option>
             </Select>
           </FormControl>
           <DateRangeFilter
@@ -440,7 +440,7 @@ const ViewCDP = ({
                 <th style={{ width: 120 }}>Tx. Date</th>
                 <th style={{ width: 250 }}>Customer</th>
                 <th style={{ width: 220 }}>Ref No.</th>
-                <th style={{ width: 110 }}>Status</th>
+                <th style={{ width: 150, textAlign: "center" }}>Status</th>
                 <th style={{ width: 150, textAlign: "right" }}>Net Amount</th>
                 <th style={{ width: 150, textAlign: "right" }}>Gross Amount</th>
                 <th style={{ width: 100, textAlign: "right" }}>Items Total</th>
@@ -495,7 +495,7 @@ const ViewCDP = ({
                     <td>{CDP.transaction_date}</td>
                     <td>{withTooltip(CDP.customer.name, "280px")}</td>
                     <td>{withTooltip(CDP.reference_number, "200px")}</td>
-                    <td>
+                    <td style={{ textAlign: "center" }}>
                       <StatusChip status={CDP.status} />
                     </td>
                     <td style={{ textAlign: "right" }}>
@@ -546,7 +546,7 @@ const ViewCDP = ({
                             }}
                             disabled={CDP.status === "archived"}
                           >
-                            Archive
+                            Hide
                           </Button>
                         )}
 

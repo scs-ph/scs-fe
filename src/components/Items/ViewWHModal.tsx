@@ -144,7 +144,11 @@ const ViewWHModal = ({
                   "--TableCell-height": "40px",
                   // the number is the amount of the header rows.
                   "--TableHeader-height": "calc(1 * var(--TableCell-height))",
-                  "--Table-firstColumnWidth": "300px",
+                  // Must match the real first column: WH Code for an item,
+                  // the name column for a warehouse. The scroll shadow is
+                  // positioned from this, so a mismatch puts it mid-column.
+                  "--Table-firstColumnWidth":
+                    type === "item" ? "120px" : "300px",
                   "--Table-lastColumnWidth": "80px",
                   // background needs to have transparency to show the scrolling shadows
                   "--TableRow-hoverBackground": "rgba(0 0 0 / 0.04)",
@@ -196,6 +200,9 @@ const ViewWHModal = ({
                       bgcolor: "background.level1",
                     },
                     "& thead th": {
+                      // Below the sticky first column, so columns
+                      // scrolling sideways pass underneath it.
+                      zIndex: 1,
                       backgroundColor: "background.level1",
                     },
                   }}
@@ -228,42 +235,35 @@ const ViewWHModal = ({
                         warehouseItem.total_returned > 0,
                     ).length > 0 ? (
                     <>
+                      <colgroup>
+                        {/* One definition of the column widths, used by both
+                            the header and the body. With a sticky first column
+                            the two can otherwise disagree, which offsets the
+                            whole header against the rows. */}
+                        {type === "item" && <col style={{ width: 120 }} />}
+                        <col style={{ width: 300 }} />
+                        <col style={{ width: 100 }} />
+                        <col style={{ width: 100 }} />
+                        <col style={{ width: 100 }} />
+                        <col style={{ width: 100 }} />
+                        <col style={{ width: 100 }} />
+                        {isAdmin && <col style={{ width: 80 }} />}
+                      </colgroup>
                       <thead>
                         <tr>
-                          {type === "item" && (
-                            <th style={{ width: 120 }}>WH Code</th>
-                          )}
-                          <th
-                            style={{
-                              width:
-                                type === "item"
-                                  ? 300
-                                  : "var(--Table-firstColumnWidth)",
-                            }}
-                          >
+                          {type === "item" && <th>WH Code</th>}
+                          <th>
                             {type === "warehouse"
                               ? "Stock Name"
                               : "Warehouse Name"}
                           </th>
-                          <th style={{ width: 100, textAlign: "right" }}>
-                            On Stock
-                          </th>
-                          <th style={{ width: 100, textAlign: "right" }}>
-                            Available
-                          </th>
-                          <th style={{ width: 100, textAlign: "right" }}>
-                            Allocated
-                          </th>
-                          <th style={{ width: 100, textAlign: "right" }}>
-                            Returned
-                          </th>
-                          <th style={{ width: 100, textAlign: "right" }}>
-                            Net Sold
-                          </th>
+                          <th style={{ textAlign: "right" }}>On Stock</th>
+                          <th style={{ textAlign: "right" }}>Available</th>
+                          <th style={{ textAlign: "right" }}>Allocated</th>
+                          <th style={{ textAlign: "right" }}>Returned</th>
+                          <th style={{ textAlign: "right" }}>Net Sold</th>
                           {isAdmin && (
-                            <th style={{ width: 80, textAlign: "center" }}>
-                              Actions
-                            </th>
+                            <th style={{ textAlign: "center" }}>Actions</th>
                           )}
                         </tr>
                       </thead>
@@ -281,7 +281,12 @@ const ViewWHModal = ({
                               key={`${warehouseItem.warehouse_id}-${warehouseItem.item_id}`}
                             >
                               {type === "item" && (
-                                <td>{warehouseItem.warehouse_code}</td>
+                                <td>
+                                  {withTooltip(
+                                    warehouseItem.warehouse_code,
+                                    "110px",
+                                  )}
+                                </td>
                               )}
                               <td>
                                 {type === "warehouse"

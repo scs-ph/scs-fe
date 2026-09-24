@@ -227,6 +227,57 @@ body {
   }
 }
 
+/*
+ * Even field grid. The flex rules above let a wrapped row's leftovers grow to
+ * fill the line, so rows end up with different column widths. Here every field
+ * gets an equal column instead, and a short last row keeps its column width.
+ * Declared after the rules above so it wins on source order at equal specificity.
+ */
+.transaction-details__fields {
+  display: grid;
+  /* auto-fill, not auto-fit: empty tracks must stay, otherwise a group with
+     fewer fields than columns stretches them out of line with its neighbours. */
+  grid-template-columns: repeat(auto-fill, minmax(min(11rem, 100%), 1fr));
+  align-items: start;
+  gap: 1rem;
+}
+
+.transaction-details__fields .MuiFormControl-root {
+  width: 100% !important;
+}
+
+/*
+ * Totals matrix: one row per amount, one column per currency, so each label is
+ * written once instead of once per currency.
+ */
+.order-summary__totals {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: baseline;
+  column-gap: 1.5rem;
+  row-gap: 0.5rem;
+}
+
+.order-summary__totals > :nth-child(3n + 2),
+.order-summary__totals > :nth-child(3n) {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Label/value pairs for summaries that aren't a per-currency matrix. */
+.summary-figures {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  column-gap: 1.5rem;
+  row-gap: 0.5rem;
+}
+
+.summary-figures > :nth-child(even) {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
 @container app-main (min-width: 56rem) {
   .form-loading-skeleton__details {
     grid-template-columns: minmax(0, 3fr) minmax(18rem, 2fr);

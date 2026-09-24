@@ -246,7 +246,7 @@ const ViewPurchaseOrder = ({
       const url = `/api/purchase_orders/${selectedRow.id}`;
       try {
         await axiosInstance.delete(url);
-        toast.success("Purchase Order archived successfully!");
+        toast.success("Purchase Order hidden successfully!");
         setPurchaseOrders((prevPO) => ({
           ...prevPO,
           items: prevPO.items.map((PO) =>
@@ -322,9 +322,9 @@ const ViewPurchaseOrder = ({
               value={status}
             >
               <Option value="all">Active</Option>
-              <Option value="posted">Posted</Option>
               <Option value="unposted">Unposted</Option>
-              <Option value="archived">Archived</Option>
+              <Option value="posted">Posted</Option>
+              <Option value="archived">Posted (Hidden)</Option>
             </Select>
           </FormControl>
           <DateRangeFilter
@@ -424,7 +424,7 @@ const ViewPurchaseOrder = ({
                 <th style={{ width: 120 }}>Tx. Date</th>
                 <th style={{ width: 300 }}>Supplier</th>
                 <th style={{ width: 180 }}>Ref No.</th>
-                <th style={{ width: 110 }}>Status</th>
+                <th style={{ width: 150, textAlign: "center" }}>Status</th>
                 <th style={{ width: 130, textAlign: "right" }}>Net Amount</th>
                 <th style={{ width: 130, textAlign: "right" }}>FOB Total</th>
                 <th style={{ width: 130, textAlign: "right" }}>Landed Total</th>
@@ -485,7 +485,7 @@ const ViewPurchaseOrder = ({
                     <td>
                       {withTooltip(purchaseOrder.reference_number, "160px")}
                     </td>
-                    <td>
+                    <td style={{ textAlign: "center" }}>
                       <StatusChip status={purchaseOrder.status} />
                     </td>
                     <td style={{ textAlign: "right" }}>
@@ -549,7 +549,7 @@ const ViewPurchaseOrder = ({
                             }}
                             disabled={purchaseOrder.status === "archived"}
                           >
-                            Archive
+                            Hide
                           </Button>
                         )}
 

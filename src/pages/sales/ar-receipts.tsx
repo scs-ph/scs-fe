@@ -18,6 +18,16 @@ const AccountsReceivableMenu = (): JSX.Element => {
   const [openEdit, setOpenEdit] = useState(false);
   const [selectedRow, setSelectedRow] = useState<AR | undefined>();
   const [isAdmin, setIsAdmin] = useState(false);
+  // Bumping this remounts the create form, so "Add A/R" always starts from a
+  // genuinely blank slate rather than a hand-maintained list of resets.
+  const [createFormKey, setCreateFormKey] = useState(0);
+
+  const startNewAR = (): void => {
+    setSelectedRow(undefined);
+    setOpenEdit(false);
+    setOpenCreate(true);
+    setCreateFormKey((key) => key + 1);
+  };
 
   // Fetch user info to determine if admin
   useEffect(() => {
@@ -36,11 +46,13 @@ const AccountsReceivableMenu = (): JSX.Element => {
     <div>
       {openCreate && (
         <ARForm
+          key={createFormKey}
           setOpen={setOpenCreate}
           openCreate={openCreate}
           openEdit={openEdit}
           title="Create AR Receipt"
           isAdmin={isAdmin}
+          onStartNew={startNewAR}
         />
       )}
 
@@ -52,6 +64,7 @@ const AccountsReceivableMenu = (): JSX.Element => {
           selectedRow={selectedRow}
           title="Edit AR Receipt"
           isAdmin={isAdmin}
+          onStartNew={startNewAR}
         />
       )}
 

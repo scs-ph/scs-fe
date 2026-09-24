@@ -244,7 +244,7 @@ const ViewAlloc = ({
       const url = `/api/allocations/${selectedRow.id}`;
       try {
         const response = await axiosInstance.delete(url);
-        toast.success("Allocation archived successfully!");
+        toast.success("Allocation hidden successfully!");
         const archivedAlloc = response.data;
         setAllocs((prevAlloc) => ({
           ...prevAlloc,
@@ -256,7 +256,7 @@ const ViewAlloc = ({
         }));
       } catch (error: any) {
         toast.error(
-          `Error message: ${getErrorMessage(error, "Archive unsuccessful")}`,
+          `Error message: ${getErrorMessage(error, "Hide unsuccessful")}`,
         );
       }
     }
@@ -326,7 +326,7 @@ const ViewAlloc = ({
               <Option value="all">Active</Option>
               <Option value="unposted">Unposted</Option>
               <Option value="posted">Posted</Option>
-              <Option value="archived">Archived</Option>
+              <Option value="archived">Posted (Hidden)</Option>
             </Select>
           </FormControl>
           <DateRangeFilter
@@ -436,7 +436,7 @@ const ViewAlloc = ({
                 </th>
                 <th style={{ width: 120 }}>Tx. Date</th>
                 <th style={{ width: 250 }}>Customer</th>
-                <th style={{ width: 110 }}>Status</th>
+                <th style={{ width: 150, textAlign: "center" }}>Status</th>
                 <th style={{ width: 200 }}>Remarks</th>
                 <th style={{ width: 150 }}>Created By</th>
                 <th style={{ width: 150 }}>Modified By</th>
@@ -486,7 +486,7 @@ const ViewAlloc = ({
                     <td>{alloc?.id}</td>
                     <td>{alloc?.transaction_date}</td>
                     <td>{withTooltip(alloc?.customer.name, "280px")}</td>
-                    <td>
+                    <td style={{ textAlign: "center" }}>
                       <StatusChip status={alloc.status} />
                     </td>
                     <td>{withTooltip(alloc?.remarks, "180px")}</td>
@@ -528,7 +528,7 @@ const ViewAlloc = ({
                             }}
                             disabled={alloc.status === "archived"}
                           >
-                            Archive
+                            Hide
                           </Button>
                         )}
                         {alloc.status === "unposted" && (

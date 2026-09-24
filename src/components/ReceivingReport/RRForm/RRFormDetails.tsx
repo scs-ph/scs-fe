@@ -4,7 +4,6 @@ import {
   Input,
   Textarea,
   Card,
-  Stack,
   Button,
   Select,
   Option,
@@ -150,8 +149,8 @@ const RRFormDetails = ({
           </div>
           {openEdit && <Divider />}
 
-          <Stack direction="row" spacing={2} sx={{ mb: 1, mt: 1 }}>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+          <Box className="transaction-details__fields" sx={{ mb: 1, mt: 1 }}>
+            <FormControl size="sm">
               <FormLabel>Supplier</FormLabel>
               <div className="flex">
                 <TooltipAutocomplete
@@ -170,7 +169,7 @@ const RRFormDetails = ({
                 />
               </div>
             </FormControl>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+            <FormControl size="sm">
               <FormLabel>Status</FormLabel>
               <Select
                 onChange={(event, value) => {
@@ -181,9 +180,13 @@ const RRFormDetails = ({
               >
                 <Option value="posted">Posted</Option>
                 <Option value="unposted">Unposted</Option>
+                {/* Display only - an archived record must never be created as one */}
+                {status === "archived" && (
+                  <Option value="archived">Archived</Option>
+                )}
               </Select>
             </FormControl>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+            <FormControl size="sm">
               <FormLabel>Transaction Date</FormLabel>
               <Input
                 type="date"
@@ -193,13 +196,11 @@ const RRFormDetails = ({
                 required
               />
             </FormControl>
-            <FormControl size="sm" sx={{ width: "22%" }}>
+            <FormControl size="sm">
               <FormLabel>Amount Disc. Total</FormLabel>
               <Textarea value={amountDiscount} disabled />
             </FormControl>
-          </Stack>
-          <Stack direction="row" spacing={2} sx={{ mb: 1, mt: 1 }}>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+            <FormControl size="sm">
               <FormLabel>Currency Used</FormLabel>
               <Select
                 onChange={(event, value) => {
@@ -217,7 +218,7 @@ const RRFormDetails = ({
                 ))}
               </Select>
             </FormControl>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+            <FormControl size="sm">
               <FormLabel>Philippine Peso Rate</FormLabel>
               <Input
                 startDecorator="₱"
@@ -236,7 +237,7 @@ const RRFormDetails = ({
                 required
               />
             </FormControl>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+            <FormControl size="sm">
               <FormLabel>Ref No.</FormLabel>
               <Input
                 size="sm"
@@ -247,7 +248,7 @@ const RRFormDetails = ({
                 required
               />
             </FormControl>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+            <FormControl size="sm">
               <FormLabel>Remarks</FormLabel>
               <Textarea
                 minRows={1}
@@ -257,72 +258,70 @@ const RRFormDetails = ({
                 disabled={isEditDisabled}
               />
             </FormControl>
-          </Stack>
-          {(!openEdit || status === "unposted") && (
-            <Stack direction="row" spacing={2} sx={{ mb: 1, mt: 3 }}>
+            {(!openEdit || status === "unposted") && (
               <Button
-                className="ml-4 bg-button-primary"
+                sx={{ gridColumn: "-2 / -1", alignSelf: "end", mt: 2 }}
+                className="bg-button-primary"
                 size="sm"
                 onClick={() => setIsSelectModalOpen(true)}
                 disabled={selectedSupplier === null || isEditDisabled}
               >
                 Fill Up SDR Table
               </Button>
-            </Stack>
-          )}
+            )}
+          </Box>
         </div>
       </Card>
       <Card variant="soft" color="neutral">
         <div>
-          <div className="grid grid-cols-2 place-items-center">
-            <FormControl size="sm" sx={{ mb: 1 }}>
-              <FormLabel>Invoice Amount</FormLabel>
-              <h5>{`${currencyUsed} ${addCommaToNumberWithTwoPlaces(netAmount)}`}</h5>
-            </FormControl>
-            <FormControl size="sm" sx={{ mb: 1 }}>
-              <FormLabel>Landed Total</FormLabel>
-              <h5>
-                ₱{addCommaToNumberWithFourPlaces(netAmount * Number(pesoRate))}
-              </h5>
-            </FormControl>
-            <FormControl size="sm" sx={{ mb: 1 }}>
-              <FormLabel>% NET Cost</FormLabel>
-              <h5>{addCommaToNumberWithTwoPlaces(percentNetCost)}</h5>
-            </FormControl>
-            <FormControl size="sm" sx={{ mb: 1 }}>
-              <FormLabel>Total Expense</FormLabel>
-              <h5>
-                ₱{addCommaToNumberWithTwoPlaces(Number(totalExpense))}
-              </h5>{" "}
-            </FormControl>
-          </div>
+          <Box className="summary-figures" sx={{ mb: 1 }}>
+            <Typography level="body-sm">Invoice Amount</Typography>
+            <Typography level="title-sm">
+              {`${currencyUsed} ${addCommaToNumberWithTwoPlaces(netAmount)}`}
+            </Typography>
+
+            <Typography level="body-sm">Landed Total</Typography>
+            <Typography level="title-sm">
+              ₱{addCommaToNumberWithFourPlaces(netAmount * Number(pesoRate))}
+            </Typography>
+
+            <Typography level="body-sm">% NET Cost</Typography>
+            <Typography level="title-sm">
+              {addCommaToNumberWithTwoPlaces(percentNetCost)}
+            </Typography>
+
+            <Typography level="body-sm">Total Expense</Typography>
+            <Typography level="title-sm">
+              ₱{addCommaToNumberWithTwoPlaces(Number(totalExpense))}
+            </Typography>
+          </Box>
           <Divider />
-          <Stack direction="row" spacing={2} sx={{ mb: 1, mt: 2.5 }}>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+          <Box className="transaction-details__fields" sx={{ mb: 1, mt: 2.5 }}>
+            <FormControl size="sm">
               <FormLabel>Created by</FormLabel>
               <p className="text-sm">
                 {selectedRow?.creator?.full_name ?? "-"}
               </p>
             </FormControl>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+            <FormControl size="sm">
               <FormLabel>Date Created</FormLabel>
               <p className="text-sm">
                 {formatToDateTime(selectedRow?.date_created)}
               </p>
             </FormControl>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+            <FormControl size="sm">
               <FormLabel>Modified by</FormLabel>
               <p className="text-sm">
                 {selectedRow?.modifier?.full_name ?? "-"}
               </p>
             </FormControl>
-            <FormControl size="sm" sx={{ mb: 1, width: "22%" }}>
+            <FormControl size="sm">
               <FormLabel>Date Modified</FormLabel>
               <p className="text-sm">
                 {formatToDateTime(selectedRow?.date_modified)}
               </p>
             </FormControl>
-          </Stack>
+          </Box>
         </div>
       </Card>
     </Box>
